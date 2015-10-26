@@ -22,12 +22,12 @@ output
    ---------------------------------------------
 */
 
-function host($get){
+function _host($get){
 
   switch($get['action']){
 
     case 'hostinsert':
-      $stmt = $get['con']->prepare($get['conf']['host']['HOSTINSERT']);
+      $stmt = $get['con']->prepare($get['conf']['Host']['HOSTINSERT']);
       $stmt->bindValue(':hostname'  ,$get['hostname'], PDO::PARAM_STR);
       $stmt->bindValue(':ipaddress' ,$get['ipaddress'], PDO::PARAM_STR);
       $stmt->execute();
@@ -35,7 +35,7 @@ function host($get){
     break;
 
     case 'moninsert':
-      $stmt = $get['con']->prepare($get['conf']['host']['MONINSERT']);
+      $stmt = $get['con']->prepare($get['conf']['Host']['MONINSERT']);
       $stmt->bindValue(':host_id'    ,$get['host_id'], PDO::PARAM_INT);
       $stmt->bindValue(':monitorName',$get['monitorName'], PDO::PARAM_STR);
       $stmt->bindValue(':monitorType',$get['monitorType'], PDO::PARAM_STR);
@@ -46,7 +46,9 @@ function host($get){
     break;
 
     case 'hostselect':
-      $stmt = $get['con']->prepare($get['conf']['Alert']['HOSTSELECT']);
+      $stmt = $get['con']->prepare($get['conf']['Host']['HOSTSELECT']);
+      $stmt->bindValue(':offset'   ,$get['offset'], PDO::PARAM_INT);
+      $stmt->bindValue(':count'    ,$get['count'], PDO::PARAM_INT);
       $stmt->execute();
       $res['result'] = !($stmt->rowCount());
       $rows = array();
@@ -57,7 +59,7 @@ function host($get){
     break;
 
     case 'monselect':
-      $stmt = $get['con']->prepare($get['conf']['Alert']['MONSELECT']);
+      $stmt = $get['con']->prepare($get['conf']['Host']['MONSELECT']);
       $stmt->bindValue(':host_id'    ,$get['host_id'], PDO::PARAM_INT);
       $stmt->execute();
       $res['result'] = !($stmt->rowCount());
@@ -69,7 +71,7 @@ function host($get){
     break;
 
     case 'hostupdate':
-      $stmt = $get['con']->prepare($get['conf']['Alert']['HOSTUPDATE']);
+      $stmt = $get['con']->prepare($get['conf']['Host']['HOSTUPDATE']);
       $stmt->bindValue(':checked',$get['checked'], PDO::PARAM_INT);
       $stmt->bindValue(':alert_id',$get['alert_id'], PDO::PARAM_INT);
       $stmt->execute();
@@ -77,7 +79,7 @@ function host($get){
     break;
 
     case 'monupdate':
-      $stmt = $get['con']->prepare($get['conf']['Alert']['MONUPDATE']);
+      $stmt = $get['con']->prepare($get['conf']['Host']['MONUPDATE']);
       $stmt->bindValue(':checked',$get['checked'], PDO::PARAM_INT);
       $stmt->bindValue(':alert_id',$get['alert_id'], PDO::PARAM_INT);
       $stmt->execute();

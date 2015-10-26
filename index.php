@@ -74,7 +74,7 @@ function alertList(){
 }
 // display alertList 
 
-// checked button action
+// alert checked button action
 function alertCheckedAction(alert_id, checked) {
   check = Math.abs( checked - 1 );
   $.get("./action.php"
@@ -84,7 +84,52 @@ function alertCheckedAction(alert_id, checked) {
     alertList();
   });
 }
-// checked button action
+// alert checked button action
+
+
+// display hostList 
+function hostList(){
+  var offset = 0;
+  var count = 100;
+
+  // clear table
+  $("#hostTable").find("tr:gt(0)").remove();
+
+  // Get host list json from db via action.php
+  $.getJSON("./action.php"
+  ,{ "act":"hostListGetJson", "offset":offset, "count":count }
+  ,function(host_json, status){
+    if(status==0){ alert("Cannot get json for host list."); }
+
+    // fetch alert list from alert_json
+    for(var data in host_json){
+
+      // append host list to table
+      $("#hostTable").append(
+        "<tr>"
+       +"<td>" + host_json[data]['hostname']  + "</td>"
+       +"<td>" + host_json[data]['ipaddress']   + "</td>"
+       +"<td>" + 'monitor' + "</td>"
+       +"</tr>"
+      );
+      // append host list to table
+    }
+  });
+}
+// display hostList 
+
+// create host
+function hostCreate(){
+  var hostname  = $("#createHostname").val();
+  var ipaddress = $("#createIpaddress").val();
+  $.getJSON("./action.php"
+  ,{ "act":"hostCreate", "hostname":hostname, "ipaddress":ipaddress }
+  ,function(res, status){
+    if(status==0){ alert("Cannot create a host."); }
+    hostList();
+  });
+}
+// create host
 
 </script>
 <!-- script -->
@@ -145,8 +190,10 @@ function alertCheckedAction(alert_id, checked) {
 
 <!-- content -->
 <div class="tab-content">
+
   <!-- alert page -->
   <div class="tab-pane active" id="tab1">
+
     <!-- alertList -->
     <div class="table-responsive">
       <table id="alertTable" class="table table-striped table-condensed">
@@ -155,30 +202,44 @@ function alertCheckedAction(alert_id, checked) {
           <th>Hostname</th>
           <th>Level</th>
           <th>Error</th>
-          <th>Checked <input type="checkbox" id="alertCheckBox" onchange="alertList()"/>
+          <th>Checked
+            <input type="checkbox" id="alertCheckBox" onchange="alertList()"/>
           </th>
         </tr>
       </table>
     </div> 
     <script> alertList(); </script>
     <!-- alertList -->
+
   </div>
   <!-- alert page -->
 
   <!-- host page -->
   <div class="tab-pane" id="tab2">
+
     <!-- modal create button -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#hostCreateModal">Create</button>
+
     <div class="modal fade" id="hostCreateModal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Modal</h4>
+            <h4 class="modal-title">Create Host</h4>
           </div>
-          <div class="modal-body">Modal</div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="hostname">hostname</label>
+              <input type="text" class="form-control" id="createHostname"/>
+            </div>
+            <div class="ipaddress">
+              <label for="ipaddress">ipaddress</label>
+              <input type="text" class="form-control" id="createIpaddress"/>
+            </div>
+          </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">CLOSE</button>
+            <button type="button" class="btn btn-primary" onclick="hostCreate()">CREATE</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
           </div>
         </div>
       </div>
@@ -203,8 +264,20 @@ function alertCheckedAction(alert_id, checked) {
     </div>
     <!-- modal delete button -->
 
-    HOST<br>
-    HOST<br>
+    <!-- hostList -->
+    <div class="table-responsive">
+      <table id="hostTable" class="table table-striped table-condensed">
+        <tr>
+          <th>hostname</th>
+          <th>ipaddress</th>
+          <th>monitor</th>
+          </th>
+        </tr>
+      </table>
+    </div> 
+    <script> hostList(); </script>
+    <!-- hostList -->
+
   </div>
   <!-- host page -->
 

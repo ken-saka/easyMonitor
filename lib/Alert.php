@@ -33,7 +33,7 @@ alertLevel_id
    ---------------------------------------------
 */
 
-function alert($get){
+function _alert($get){
 
   switch($get['action']){
     case 'insert':
