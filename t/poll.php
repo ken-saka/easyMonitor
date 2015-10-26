@@ -1,6 +1,6 @@
 <?php
 
-$conf = parse_ini_file("/var/share/kanshi/lib/Conf.ini",true);
+$conf = parse_ini_file("/var/share/html/easyMonitor/lib/Conf.ini",true);
 require("../lib/Db.php");
 require("../lib/Polling.php");
 require("../lib/Alert.php");

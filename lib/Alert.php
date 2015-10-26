@@ -42,24 +42,29 @@ function alert($get){
       $stmt->bindValue(':alertLevel_id',$get['alertLevel_id'], PDO::PARAM_INT);
       $stmt->bindValue(':alertContent' ,$get['alertContent'], PDO::PARAM_STR);
       $stmt->execute();
-      $res['result'];
+      $res['result']=0;
     break;
 
     case 'select':
       $stmt = $get['con']->prepare($get['conf']['Alert']['SELECT']);
-echo $get['conf']['Alert']['SELECT']."\n";
       $stmt->bindValue(':offset' , $get['offset'],  PDO::PARAM_INT);
       $stmt->bindValue(':count'  , $get['count'],   PDO::PARAM_INT);
       $stmt->execute();
       $res['result'] = !($stmt->rowCount());
-      $res['list'] = array();
+      $rows = array();
       while($row = $stmt->fetch()){
-        $res['list'] += array($row);
+        $rows[] = $row;
       }
-    break;
-    case 'delete':
+      $res['list'] = json_encode($rows);
     break;
     case 'update':
+      $stmt = $get['con']->prepare($get['conf']['Alert']['UPDATE']);
+      $stmt->bindValue(':checked',$get['checked'], PDO::PARAM_INT);
+      $stmt->bindValue(':alert_id',$get['alert_id'], PDO::PARAM_INT);
+      $stmt->execute();
+      $res['result']=0;
+    break;
+    case 'delete':
     break;
   }
   return $res;

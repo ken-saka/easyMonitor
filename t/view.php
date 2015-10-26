@@ -1,6 +1,6 @@
 <?php
 
-$conf = parse_ini_file("/var/share/kanshi/lib/Conf.ini",true);
+$conf = parse_ini_file("/var/share/html/easyMonitor/lib/Conf.ini",true);
 require("../lib/Db.php");
 require("../lib/Alert.php");
 
@@ -12,7 +12,9 @@ $res = alert([
  ,'count'=>10
 ]);
 
-var_dump($res['list']);
+// var_dump($res['list']);
+
+echo $res['list'];
 
 /*
 foreach($row = $res['list']){
