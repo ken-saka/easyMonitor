@@ -107,6 +107,10 @@ function hostList(){
       // append host list to table
       $("#hostTable").append(
         "<tr>"
+       +"<td>"
+         + '<input type="checkbox" id="hostdeletecheck" value="'
+           + host_json[data]['host_id']
+         + '"/></td>'
        +"<td>" + host_json[data]['hostname']  + "</td>"
        +"<td>" + host_json[data]['ipaddress']   + "</td>"
        +"<td>" + 'monitor' + "</td>"
@@ -130,6 +134,42 @@ function hostCreate(){
   });
 }
 // create host
+
+// display monitorList 
+  var offset = 0;
+  var count = 100;
+
+  // clear table
+  $("#monitorTable").find("tr:gt(0)").remove();
+
+  // Get host list json from db via action.php
+  $.getJSON("./action.php"
+  ,{ "act":"monitorListGetJson", "offset":offset, "count":count }
+  ,function(monitor_json, status){
+    if(status==0){ alert("Cannot get json for monitor list."); }
+
+    // fetch alert list from alert_json
+    for(var data in monitor_json){
+
+      // append host list to table
+      $("#monitorTable").append(
+        "<tr>"
+       +"<td>"
+         + '<input type="checkbox" id="monitordeletecheck" value="'
+           + host_json[data]['monitor_id']
+         + '"/></td>'
+       +"<td>" + host_json[data]['monitorName']  + "</td>"
+       +"<td>" + host_json[data]['MonitorType']   + "</td>"
+       +"<td>" + host_json[data]['hostname']   + "</td>"
+       +"<td>" + host_json[data]['argument']   + "</td>"
+       +"<td>" + host_json[data]['timeout']   + "</td>"
+       +"<td>" + 'monitor' + "</td>"
+       +"</tr>"
+      );
+      // append host list to table
+    }
+  });
+// display monitorList 
 
 </script>
 <!-- script -->
@@ -253,11 +293,14 @@ function hostCreate(){
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Modal</h4>
+            <h4 class="modal-title">Delete host?</h4>
           </div>
-          <div class="modal-body">Modal</div>
+          <div class="modal-body">
+            <script></script>
+          </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">CLOSE</button>
+            <button type="button" class="btn btn-danger" onclick="hostDelete()">DELETE</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
           </div>
         </div>
       </div>
@@ -268,6 +311,7 @@ function hostCreate(){
     <div class="table-responsive">
       <table id="hostTable" class="table table-striped table-condensed">
         <tr>
+          <th>check</th>
           <th>hostname</th>
           <th>ipaddress</th>
           <th>monitor</th>
