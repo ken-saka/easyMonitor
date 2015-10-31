@@ -12,9 +12,9 @@ switch ($act) {
     $alert_id = htmlspecialchars($_GET["alert_id"]);
     $checked = htmlspecialchars($_GET["checked"]);
     _alert([
-         'action'=>'update'
-        ,'conf'=>$conf
-        ,'con'=>$con
+         'action'  =>'update'
+        ,'conf'    =>$conf
+        ,'con'     =>$con
         ,'alert_id'=>$alert_id
         ,'checked'=>$checked
      ]);
@@ -24,11 +24,11 @@ switch ($act) {
     $offset = htmlspecialchars($_GET["offset"]);
     $count = htmlspecialchars($_GET["count"]);
     $res = _alert([
-      'action'=>'select'
-     ,'conf'=>$conf
-     ,'con'=>$con
-     ,'offset'=>$offset
-     ,'count'=>$count
+      'action'   =>'select'
+     ,'conf'     =>$conf
+     ,'con'      =>$con
+     ,'offset'   =>$offset
+     ,'count'    =>$count
     ]);
     echo $res['list'];
   break;
@@ -39,7 +39,7 @@ switch ($act) {
     $res = _host([
       'action'=>'hostselect'
      ,'conf'=>$conf
-     ,'con'=>$con
+     ,'con' =>$con
      ,'offset'=>$offset
      ,'count'=>$count
     ]);
@@ -56,6 +56,18 @@ switch ($act) {
      ,'hostname'=>$hostname
      ,'ipaddress'=>$ipaddress
     ]);
+    echo $res['list'];
+  break;
+
+  case "hostDelete":
+    $host_id = htmlspecialchars($_GET["host_id"]);
+    $res = _host([
+      'action'=>'hostdelete'
+     ,'conf'=>$conf
+     ,'con'=>$con
+     ,'host_id'=>$host_id
+    ]);
+    echo $res['list'];
   break;
 }
 

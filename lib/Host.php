@@ -32,6 +32,8 @@ function _host($get){
       $stmt->bindValue(':ipaddress' ,$get['ipaddress'], PDO::PARAM_STR);
       $stmt->execute();
       $res['result']=0;
+      $host_id = $get['con']->lastInsertId();
+      $res['list'] = $host_id;
     break;
 
     case 'moninsert':
@@ -43,6 +45,8 @@ function _host($get){
       $stmt->bindValue(':timeout'    ,$get['timeout'], PDO::PARAM_STR);
       $stmt->execute();
       $res['result']=0;
+      $monitor_id = $get['con']->lastInsertId();
+      $res['list'] = json_encode("'monitor_id':$monitor_id");
     break;
 
     case 'hostselect':
@@ -53,7 +57,11 @@ function _host($get){
       $res['result'] = !($stmt->rowCount());
       $rows = array();
       while($row = $stmt->fetch()){
-        $rows[] = $row;
+        $rows[$row[0]] = array(
+          'host_id'    => $row["host_id"]
+         ,'hostname'   => $row["hostname"]
+         ,'ipaddress'  => $row["ipaddress"]
+        );
       }
       $res['list'] = json_encode($rows);
     break;
@@ -87,6 +95,11 @@ function _host($get){
     break;
 
     case 'hostdelete':
+      $stmt = $get['con']->prepare($get['conf']['Host']['HOSTDELETE']);
+      $stmt->bindValue(':host_id',$get['host_id'], PDO::PARAM_INT);
+      $stmt->execute();
+      $res['result']=0;
+      $res['list']=$get['host_id'];
     break;
 
     case 'mondelete':

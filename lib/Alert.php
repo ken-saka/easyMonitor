@@ -53,7 +53,14 @@ function _alert($get){
       $res['result'] = !($stmt->rowCount());
       $rows = array();
       while($row = $stmt->fetch()){
-        $rows[] = $row;
+        $rows[$row[0]] = array(
+          'alert_id'    => $row["alert_id"]
+         ,'occurDate'   => $row["occurDate"]
+         ,'hostname'    => $row["hostname"]
+         ,'alertLevel'  => $row["alertLevel"]
+         ,'alertContent'=> $row["alertContent"]
+         ,'checked'     => $row["checked"]
+        );
       }
       $res['list'] = json_encode($rows);
     break;
