@@ -1,0 +1,13 @@
+# pukiwiki for soc-nc
+server {
+  listen   80;
+  server_name default_server;
+  root   /var/share/html;
+  index  index.php index.html index.htm;
+  location ~ \.php$ {
+    fastcgi_pass    127.0.0.1:9000;
+    fastcgi_index   index.php;
+    fastcgi_param   SCRIPT_FILENAME /var/share/html$fastcgi_script_name;
+    include         fastcgi_params;
+  }
+}
