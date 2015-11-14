@@ -111,8 +111,10 @@ CREATE TABLE `tbl_monitor` (
   `monitor_id` int(11) NOT NULL AUTO_INCREMENT,
   `monitorName` varchar(64) NOT NULL,
   `monitorType` varchar(20) NOT NULL,
-  `host_id` int(11) NOT NULL,
+  `host_id` int(11),
   `argument` text,
+  `timeout` tinyint,
+  `retry` tinyint,
   PRIMARY KEY (`monitor_id`),
   KEY `monitorName` (`monitorName`,`monitorType`,`host_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
